@@ -1,0 +1,54 @@
+import express = require("express");
+import * as bodyParser from "body-parser";
+import helmet = require("helmet");
+import cors = require("cors");
+import mongoose = require("mongoose");
+import { GenreRoutes } from "../routes/genre.routes";
+import { CommonRoutes } from "../routes/common.routes";
+import { MangaRoutes } from "../routes/manga.routes";
+
+class App {
+  public app: express.Application;
+  private corsOptions: object;
+  private genre_routes: GenreRoutes = new GenreRoutes();
+  private common_routes: CommonRoutes = new CommonRoutes();
+  private manga_routes: MangaRoutes = new MangaRoutes();
+  private mongoConfig: object;
+  private mongoURL: string = "mongodb://localhost:27017/RandomManga";
+
+  constructor() {
+    this.app = express();
+    this.corsOptions = {
+      origin: "http://localhost:4200",
+    };
+    this.mongoConfig = {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    };
+    this.config();
+    this.mongoConnect();
+    this.genre_routes.route(this.app);
+    this.manga_routes.route(this.app);
+    this.common_routes.route(this.app);
+  }
+
+  private config(): void {
+    this.app.use(helmet());
+    this.app.use(bodyParser.json());
+    this.app.use(bodyParser.urlencoded({ extended: true }));
+    this.app.use(cors(this.corsOptions));
+  }
+
+  private mongoConnect(): void {
+    mongoose
+      .connect(this.mongoURL, this.mongoConfig)
+      .then(() => {
+        console.log("Succesfully Connected to MongoDB");
+      })
+      .catch((err: Error) => {
+        console.log(`Error connecting to MongoDB ${err.message}`);
+      });
+  }
+}
+
+export default new App().app;
