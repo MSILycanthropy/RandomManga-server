@@ -22,7 +22,7 @@
   "scripts": {
     "start": "node src/server.js",
     "compile": "npm run tsc && node dist/server.js",
-    "dev": "nodemon -e ts --exec \"npm run compile\"",
+    "dev": "nodemon -L -e ts --exec \"npm run compile\"",
     "tsc": "tsc"
   },
   "author": "Ethan Kircher",
