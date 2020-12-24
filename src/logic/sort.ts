@@ -24,7 +24,10 @@ new GenreService().findAll({}, (err: any, data: Array<IGenre>) => {
  * @beta
  */
 
-export function sort(mangas: Array<IManga>, want: Array<any>): Array<any> {
+export function sort(mangas: Array<IManga>, want: Array<any>): Array<IManga> {
+  if (want[0] == "none") {
+    return mangas;
+  }
   var manga_genres: Array<any> = mangas.map((e) => e.Genres);
   //TODO: Transform these to maps so that they are more readable
   manga_genres = manga_genres.map((array) =>

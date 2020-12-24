@@ -6,7 +6,7 @@ export class MangaRoutes {
 
   public route(app: Application) {
     app.get(
-      "/manga/:include/:exclude/:scoreMin",
+      "/manga/:type/:include/:exclude/:scoreMin/:finished/:amount",
       (req: Request, res: Response) => {
         this.manga_controller.findByGenre(req, res);
       }
