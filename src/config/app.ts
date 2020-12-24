@@ -6,6 +6,7 @@ import mongoose = require("mongoose");
 import { GenreRoutes } from "../routes/genre.routes";
 import { CommonRoutes } from "../routes/common.routes";
 import { MangaRoutes } from "../routes/manga.routes";
+import path = require("path");
 
 class App {
   public app: express.Application;
@@ -33,6 +34,8 @@ class App {
   }
 
   private config(): void {
+    this.app.use("/assets", express.static(path.join(__dirname, "../assets")));
+
     this.app.use(helmet());
     this.app.use(bodyParser.json());
     this.app.use(bodyParser.urlencoded({ extended: true }));
