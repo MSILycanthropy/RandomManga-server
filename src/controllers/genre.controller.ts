@@ -1,10 +1,5 @@
 import { Request, Response } from "express";
-import {
-  success,
-  failure,
-  insufficientParameters,
-  mongoError,
-} from "../modules/common/service";
+import { success, failure, insufficientParameters, mongoError } from "../modules/common/service";
 import { IGenre } from "../modules/genre/genre.model";
 import GenreService from "../modules/genre/genre.service";
 

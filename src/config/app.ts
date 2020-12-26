@@ -15,12 +15,19 @@ class App {
   private common_routes: CommonRoutes = new CommonRoutes();
   private manga_routes: MangaRoutes = new MangaRoutes();
   private mongoConfig: object;
-  private mongoURL: string = "mongodb://localhost:27017/RandomManga";
+  private allowedDomain: string;
+  private mongoURL: string =
+    "mongodb+srv://Lycanthropy:brdU2aUpc1dtXdTs@randommanga.ecvu9.mongodb.net/RandomManga?retryWrites=true&w=majority";
 
   constructor() {
     this.app = express();
+    if (process.env.NODE_ENV == "production") {
+      this.allowedDomain = "https://randommanga.netlify.app/";
+    } else {
+      this.allowedDomain = "http://localhost:4200";
+    }
     this.corsOptions = {
-      origin: "http://localhost:4200",
+      origin: this.allowedDomain,
     };
     this.mongoConfig = {
       useNewUrlParser: true,
