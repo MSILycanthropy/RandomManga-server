@@ -20,7 +20,7 @@ const schema = new Schema(
     isFinished: Boolean,
     Synopsis: String,
   },
-  { collection: "manga" }
+  { collection: "mangas" }
 );
 
 export default mongoose.model("mangas", schema);

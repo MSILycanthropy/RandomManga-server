@@ -6,7 +6,7 @@ const schema = new Schema(
   {
     genre_name: { type: String, required: true },
   },
-  { collection: "genre" }
+  { collection: "genres" }
 );
 
 export default mongoose.model("genre", schema);
