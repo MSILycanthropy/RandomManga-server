@@ -22,7 +22,7 @@ class App {
   constructor() {
     this.app = express();
     if (process.env.NODE_ENV == "production") {
-      this.allowedDomain = "https://randommanga.netlify.app/";
+      this.allowedDomain = "https://test.rngmanga.com";
     } else {
       this.allowedDomain = "http://localhost:4200";
     }
