@@ -3,7 +3,7 @@ import { success, failure, insufficientParameters, mongoError } from "../modules
 import { IManga } from "../modules/manga/manga.model";
 import MangaService from "../modules/manga/manga.service";
 import { sort } from "../logic/sort";
-
+const sha1 = require("sha1");
 //import express = require("express");
 
 export class MangaController {
@@ -17,6 +17,23 @@ export class MangaController {
       req.params.scoreMin &&
       req.params.amount
     ) {
+      if (process.env.NODE_ENV == "production") {
+        const secret_lol = "47eecfdece6dfb851fec9b2b7bdfe48c71cb0008f2728d32250a578f172b849c";
+        const hash = sha1(
+          `${req.params.type}${secret_lol}${req.params.include}\
+        ${req.params.exclude}${req.params.scoreMin}${req.params.amount}`.replace(/ /g, "")
+        );
+
+        if (hash != req.query.gamma) {
+          failure(
+            "My server runs off of a raspberry pi, so just ask for the data you want please 💖",
+            {},
+            res
+          );
+          return;
+        }
+      }
+
       const base_agg = [{ $sample: { size: parseInt(req.params.amount) } }];
       var include_agg: object,
         exclude_agg: object,
@@ -40,7 +57,7 @@ export class MangaController {
       if (req.params.scoreMin != "NaN") {
         scoreMin_agg = { $match: { Score: { $gt: parseInt(req.params.scoreMin) } } };
       }
-      if (req.params.finished_agg) {
+      if (req.params.finished) {
         finished_agg = { $match: { isFinished: req.params.finished == "true" } };
       }
 
