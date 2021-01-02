@@ -6,6 +6,7 @@ import mongoose = require("mongoose");
 import { GenreRoutes } from "../routes/genre.routes";
 import { CommonRoutes } from "../routes/common.routes";
 import { MangaRoutes } from "../routes/manga.routes";
+import { AssetRoutes } from "../routes/asset.routes";
 import path = require("path");
 
 class App {
@@ -14,6 +15,7 @@ class App {
   private genre_routes: GenreRoutes = new GenreRoutes();
   private common_routes: CommonRoutes = new CommonRoutes();
   private manga_routes: MangaRoutes = new MangaRoutes();
+  private asset_routes: AssetRoutes = new AssetRoutes();
   private mongoConfig: object;
   private allowedDomain: string;
   private mongoURL: string =
@@ -37,12 +39,11 @@ class App {
     this.mongoConnect();
     this.genre_routes.route(this.app);
     this.manga_routes.route(this.app);
+    this.asset_routes.route(this.app);
     this.common_routes.route(this.app);
   }
 
   private config(): void {
-    this.app.use("/assets", express.static(path.join(__dirname, "../assets")));
-
     this.app.use(helmet());
     this.app.use(bodyParser.json());
     this.app.use(bodyParser.urlencoded({ extended: true }));

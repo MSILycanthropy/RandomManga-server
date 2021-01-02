@@ -8,7 +8,7 @@ import GenreService from "../modules/genre/genre.service";
 export class GenreController {
   private genre_service: GenreService = new GenreService();
 
-  public find_all(req: Request, res: Response) {
+  public find_all(req: Request, res: Response): void {
     this.genre_service.findAll({}, (err: any, data: IGenre) => {
       if (err) {
         mongoError(err, res);
