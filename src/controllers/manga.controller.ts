@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import e, { Request, Response } from "express";
 import { success, failure, insufficientParameters, mongoError } from "../modules/common/service";
 import { IManga } from "../modules/manga/manga.model";
 import MangaService from "../modules/manga/manga.service";
@@ -6,17 +6,37 @@ import { sort } from "../logic/sort";
 const sha1 = require("sha1");
 //import express = require("express");
 
+var dailies: Array<IManga>;
+function setDailies(): void {
+  let manga_service = new MangaService();
+  const agg = [{ $match: { Score: { $ne: null } } }, { $sample: { size: 10 } }, { $sort: { Score: -1 } }];
+  manga_service.find(agg, (err: any, data: Array<IManga>) => {
+    if (err) {
+      console.error(err);
+    } else {
+      dailies = data;
+    }
+  });
+}
+
+setDailies();
+setInterval(() => {
+  setDailies();
+}, 300000);
+
 export class MangaController {
   private manga_service = new MangaService();
 
-  public findByGenre(req: Request, res: Response) {
-    if (
-      req.params.include &&
-      req.params.exclude &&
-      req.params.type &&
-      req.params.scoreMin &&
-      req.params.amount
-    ) {
+  public getDailies(res: Response): void {
+    if (dailies) {
+      success(dailies, res);
+    } else {
+      failure("Dailies not found", {}, res);
+    }
+  }
+
+  public findByGenre(req: Request, res: Response): void {
+    if (req.params.include && req.params.exclude && req.params.type && req.params.scoreMin && req.params.amount) {
       if (process.env.NODE_ENV == "production") {
         const secret_lol = "47eecfdece6dfb851fec9b2b7bdfe48c71cb0008f2728d32250a578f172b849c";
         const hash = sha1(
@@ -25,21 +45,13 @@ export class MangaController {
         );
 
         if (hash != req.query.gamma) {
-          failure(
-            "My server runs off of a raspberry pi, so just ask for the data you want please 💖",
-            {},
-            res
-          );
+          failure("My server runs off of a raspberry pi, so just ask for the data you want please 💖", {}, res);
           return;
         }
       }
 
       const base_agg = [{ $sample: { size: parseInt(req.params.amount) } }];
-      var include_agg: object,
-        exclude_agg: object,
-        type_agg: object,
-        scoreMin_agg: object,
-        finished_agg: object;
+      let include_agg: object, exclude_agg: object, type_agg: object, scoreMin_agg: object, finished_agg: object;
 
       include_agg = exclude_agg = type_agg = scoreMin_agg = finished_agg = {
         $match: { _id: { $exists: true } },
