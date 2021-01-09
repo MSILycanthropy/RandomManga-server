@@ -6,8 +6,6 @@ export class AssetRoutes {
 
   public route(app: Application) {
     app.get("/assets/:path.jpg", (req: Request, res: Response) => {
-      console.log("poggers!!!!");
-
       this.image_controller.getImage(req, res);
     });
   }

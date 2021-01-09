@@ -18,8 +18,7 @@ class App {
   private asset_routes: AssetRoutes = new AssetRoutes();
   private mongoConfig: object;
   private allowedDomain: string;
-  private mongoURL: string =
-    "mongodb+srv://Lycanthropy:brdU2aUpc1dtXdTs@randommanga.ecvu9.mongodb.net/RandomManga?retryWrites=true&w=majority";
+  private mongoURL: string = process.env.MONGODB_URI || ";)";
 
   constructor() {
     this.app = express();
