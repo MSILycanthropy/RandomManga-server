@@ -35,6 +35,8 @@ class App {
       useUnifiedTopology: true,
     };
     this.config();
+    console.log(this.mongoURL);
+
     this.mongoConnect();
     this.genre_routes.route(this.app);
     this.manga_routes.route(this.app);
