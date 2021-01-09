@@ -2,7 +2,7 @@ export interface IManga {
   _id?: string;
   Title: string;
   English: string;
-  Japanese: string;
+  Native: string;
   Type: string;
   Volumes: number;
   Chapters: number;
@@ -10,9 +10,10 @@ export interface IManga {
   Authors: Array<string>;
   Serialization: string;
   Score: Number;
-  Start: string;
-  End: string;
+  Start: Object;
+  End: Object;
   URL: string;
   isFinished: boolean;
   Synopsis: string;
+  Synonyms: Array<string>;
 }

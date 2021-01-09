@@ -35,6 +35,20 @@ export class MangaController {
     }
   }
 
+  public findById(req: Request, res: Response): void {
+    if (req.params.id) {
+      this.manga_service.findById(req.params.id, (err: any, data: IManga) => {
+        if (!err) {
+          success(data, res);
+        } else {
+          mongoError(err, res);
+        }
+      });
+    } else {
+      insufficientParameters(res);
+    }
+  }
+
   public findByGenre(req: Request, res: Response): void {
     if (req.params.include && req.params.exclude && req.params.type && req.params.scoreMin && req.params.amount) {
       if (process.env.NODE_ENV == "production") {

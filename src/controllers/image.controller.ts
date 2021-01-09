@@ -7,7 +7,11 @@ import path = require("path");
 export class ImageController {
   public getImage(req: Request, res: Response): void {
     if (req.params.path) {
-      resize(`../assets/${req.params.path.replace(/-/g, "/")}.jpg`, res);
+      try {
+        resize(`../assets/${req.params.path.replace(/-/g, "/")}.jpg`, res);
+      } catch (e) {
+        failure(e, {}, res);
+      }
     } else {
       insufficientParameters(res);
     }

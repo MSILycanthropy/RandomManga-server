@@ -12,5 +12,9 @@ export class MangaRoutes {
     app.get("/manga/dailies", (req: Request, res: Response) => {
       this.manga_controller.getDailies(res);
     });
+
+    app.get("/manga/:id", (req: Request, res: Response) => {
+      this.manga_controller.findById(req, res);
+    });
   }
 }
