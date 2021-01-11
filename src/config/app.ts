@@ -7,6 +7,7 @@ import { GenreRoutes } from "../routes/genre.routes";
 import { CommonRoutes } from "../routes/common.routes";
 import { MangaRoutes } from "../routes/manga.routes";
 import { AssetRoutes } from "../routes/asset.routes";
+import { EmailRoutes } from "../routes/email.routes";
 import path = require("path");
 
 class App {
@@ -16,6 +17,7 @@ class App {
   private common_routes: CommonRoutes = new CommonRoutes();
   private manga_routes: MangaRoutes = new MangaRoutes();
   private asset_routes: AssetRoutes = new AssetRoutes();
+  private email_routes: EmailRoutes = new EmailRoutes();
   private mongoConfig: object;
   private allowedDomain: string;
   private mongoURL: string = process.env.MONGODB_URI || ";)";
@@ -39,12 +41,13 @@ class App {
     this.genre_routes.route(this.app);
     this.manga_routes.route(this.app);
     this.asset_routes.route(this.app);
+    this.email_routes.route(this.app);
     this.common_routes.route(this.app);
   }
 
   private config(): void {
     this.app.use(helmet());
-    this.app.use(bodyParser.json());
+    //this.app.use(bodyParser.json());
     this.app.use(bodyParser.urlencoded({ extended: true }));
     this.app.use(cors(this.corsOptions));
   }
