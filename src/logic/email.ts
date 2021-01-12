@@ -1,8 +1,7 @@
 import { Request, Response } from "express";
 import * as nodemailer from "nodemailer";
-import { failure, success } from "../modules/common/service";
 
-export function sendMail(req: Request, res: Response): void {
+export function sendContactMail(req: Request, res: Response): void {
   const smtpTrans = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 465,
@@ -21,9 +20,46 @@ export function sendMail(req: Request, res: Response): void {
   };
 
   smtpTrans.sendMail(options, (err: any, res: Response) => {
-    console.log("sending!");
-    console.log(req.body);
+    if (!err) {
+      res.end("Thanks for the feedback!");
+    } else {
+      res.end(`Something went wrong! \n ${err}`);
+    }
+  });
+}
 
+export function sendReportMail(req: Request, res: Response): void {
+  const smtpTrans = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
+    auth: {
+      user: "RNGmanga.com@gmail.com",
+      pass: process.env.EMAIL_PASS,
+    },
+  });
+
+  const options = {
+    from: "Test",
+    to: "RNGmanga.com@gmail.com",
+    subject: `Data update report from ${req.body.name}`,
+    text: `Name: ${req.body.name} \n\
+           Email: ${req.body.email} \n\
+           Title: ${req.body.title} \n\
+           English Title: ${req.body.englishTitle} \n\
+           Alternate Titles: ${req.body.alternateTitles}\n\
+           Type: ${req.body.type} \n\
+           Volumes: ${req.body.volumes} \n\
+           Chapters: ${req.body.chapters} \n\
+           Start Date: ${req.body.startDate} \n\
+           End Date: ${req.body.endDate} \n\
+           Finished: ${req.body.finished} \n\
+           Authors: ${req.body.authors} \n\
+           Genres: ${req.body.genres} \n\
+          `,
+  };
+
+  smtpTrans.sendMail(options, (err: any, res: Response) => {
     if (!err) {
       res.end("Thanks for the feedback!");
     } else {
