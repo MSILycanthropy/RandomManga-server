@@ -43,7 +43,7 @@ export function sendReportMail(req: Request, res: Response): void {
     from: "Test",
     to: "RNGmanga.com@gmail.com",
     subject: `Data update report from ${req.body.name}`,
-    text: `Name: ${req.body.name} \n\
+    text: `\tName: ${req.body.name} \n\
            Email: ${req.body.email} \n\
            Title: ${req.body.title} \n\
            English Title: ${req.body.englishTitle} \n\
@@ -56,6 +56,7 @@ export function sendReportMail(req: Request, res: Response): void {
            Finished: ${req.body.finished} \n\
            Authors: ${req.body.authors} \n\
            Genres: ${req.body.genres} \n\
+           Synopsis: ${req.body.synopsis} \n\
           `,
   };
 
@@ -63,6 +64,8 @@ export function sendReportMail(req: Request, res: Response): void {
     if (!err) {
       res.end("Thanks for the feedback!");
     } else {
+      console.log(err);
+
       res.end(`Something went wrong! \n ${err}`);
     }
   });
