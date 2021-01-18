@@ -1,10 +1,10 @@
-import e, { Request, Response } from "express";
+import { Request, Response } from "express";
 import { success, failure, insufficientParameters, mongoError } from "../modules/common/service";
 import { IManga } from "../modules/manga/manga.model";
 import MangaService from "../modules/manga/manga.service";
 import { sort } from "../logic/sort";
+import * as schedule from "node-schedule";
 const sha1 = require("sha1");
-//import express = require("express");
 
 var dailies: Array<IManga>;
 function setDailies(): void {
@@ -20,9 +20,9 @@ function setDailies(): void {
 }
 
 setDailies();
-setInterval(() => {
+schedule.scheduleJob("0 0 * * * ", () => {
   setDailies();
-}, 300000);
+});
 
 export class MangaController {
   private manga_service = new MangaService();
@@ -99,5 +99,16 @@ export class MangaController {
     } else {
       insufficientParameters(res);
     }
+  }
+
+  public search(req: Request, res: Response) {
+    const agg = [{ $match: { $text: { $search: req.params.search } } }, { $sort: { Score: -1 } }];
+    this.manga_service.find(agg, (err: any, data: Array<IManga>) => {
+      if (err) {
+        mongoError(err, res);
+      } else {
+        success(data, res);
+      }
+    });
   }
 }
