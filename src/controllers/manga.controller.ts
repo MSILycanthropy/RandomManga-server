@@ -100,4 +100,15 @@ export class MangaController {
       insufficientParameters(res);
     }
   }
+
+  public search(req: Request, res: Response) {
+    const agg = [{ $match: { $text: { $search: req.params.search } } }, { $sort: { Score: -1 } }];
+    this.manga_service.find(agg, (err: any, data: Array<IManga>) => {
+      if (err) {
+        mongoError(err, res);
+      } else {
+        success(data, res);
+      }
+    });
+  }
 }

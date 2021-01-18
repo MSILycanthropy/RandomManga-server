@@ -16,5 +16,9 @@ export class MangaRoutes {
     app.get("/manga/:id", (req: Request, res: Response) => {
       this.manga_controller.findById(req, res);
     });
+
+    app.get("/manga/search/:search", (req: Request, res: Response) => {
+      this.manga_controller.search(req, res);
+    });
   }
 }
