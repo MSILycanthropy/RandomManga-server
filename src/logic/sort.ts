@@ -8,11 +8,13 @@ import { oneHotEncode, score } from "./utils";
  */
 var GENRES: Array<String> = [];
 var ENCODED_GENRES: Array<number> = [];
-new GenreService().findAll({}, (err: any, data: Array<IGenre>) => {
-  GENRES = data.map((e) => e.genre_name);
-  ENCODED_GENRES = oneHotEncode(GENRES);
-});
 
+export function getGenres(): void {
+  new GenreService().findAll({}, (err: any, data: Array<IGenre>) => {
+    GENRES = data.map((e) => e.genre_name);
+    ENCODED_GENRES = oneHotEncode(GENRES);
+  });
+}
 /**
  *
  * Sorts mangas based on how their geners match the genres we want
@@ -30,9 +32,7 @@ export function sort(mangas: Array<IManga>, want: Array<any>): Array<IManga> {
   }
   var manga_genres: Array<any> = mangas.map((e) => e.Genres);
   //TODO: Transform these to maps so that they are more readable
-  manga_genres = manga_genres.map((array) =>
-    array.map((e: any) => GENRES.findIndex((find) => find == e))
-  );
+  manga_genres = manga_genres.map((array) => array.map((e: any) => GENRES.findIndex((find) => find == e)));
 
   want = want.map((e) => GENRES.findIndex((find) => find == e));
 
