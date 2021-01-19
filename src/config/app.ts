@@ -8,6 +8,7 @@ import { CommonRoutes } from "../routes/common.routes";
 import { MangaRoutes } from "../routes/manga.routes";
 import { AssetRoutes } from "../routes/asset.routes";
 import { EmailRoutes } from "../routes/email.routes";
+import { getGenres } from "../logic/sort";
 import path = require("path");
 
 class App {
@@ -57,6 +58,7 @@ class App {
       .connect(this.mongoURL, this.mongoConfig)
       .then(() => {
         console.log("Succesfully Connected to MongoDB");
+        getGenres();
       })
       .catch((err: Error) => {
         console.log(`Error connecting to MongoDB ${err.message}`);
