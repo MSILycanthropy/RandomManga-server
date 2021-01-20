@@ -81,7 +81,7 @@ export class MangaController {
         type_agg = { $match: { Type: req.params.type } };
       }
       if (req.params.scoreMin != "NaN") {
-        scoreMin_agg = { $match: { Score: { $gt: parseInt(req.params.scoreMin) } } };
+        scoreMin_agg = { $match: { Score: { $gt: parseFloat(req.params.scoreMin) } } };
       }
       if (req.params.finished) {
         finished_agg = { $match: { isFinished: req.params.finished == "true" } };
